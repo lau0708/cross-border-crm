@@ -4,6 +4,12 @@
 
 [架构说明](docs/architecture/README.md) · [服务接入](docs/integrations/agent-services.md) · [开发配置](docs/SETUP.md) · [验证记录](docs/testing/system-acceptance-fixes-2026-10-03.md)
 
+### 在线演示
+
+[▶ 打开在线演示（无需配置）](https://lau0708.github.io/cross-border-crm/) · [本地启动](#演示与真实运行回放)
+
+纯静态回放：包含脱敏的真实模型录制 + 合成 CRM 场景，无真实外发，不需要 Supabase / Redis / API Key。想跑起来看本地开发，见下方「快速开始」。
+
 > CRM 保存业务事实，Agent 驱动跟进行动，Harness 管理执行边界与授权。
 
 ## 定位
@@ -23,6 +29,25 @@
 - 远端命中须经归属标识、运行标识和内容哈希核对，并映射回本地记录 ID，否则丢弃。
 - 服务不可用或部分返回时回退本地读取，并标明覆盖范围。
 - 读回前后重新校验隐私与最新事实，避免把「未检索到」误判为「客户没有该偏好」。
+
+```mermaid
+sequenceDiagram
+    participant U as 人工确认
+    participant CRM as CRM 产品层
+    participant SQL as SQL 唯一权威
+    participant M as Mem0 适配器
+    participant C as 上下文构建
+
+    U->>CRM: 确认客户事实（归属 / 运行 / 内容哈希）
+    CRM->>SQL: 写入已确认事实
+    SQL-->>CRM: 返回本地记录 ID
+    CRM->>M: 仅对已确认条目排序（不做事实源）
+    M-->>CRM: 排序后的记忆候选
+    CRM->>SQL: 核对归属 / 版本 / 哈希，映射本地 ID
+    SQL-->>CRM: 命中或丢弃
+    CRM->>C: 回填最新事实（重校验隐私与新鲜度）
+    C-->>CRM: 「未检索到」不等于「客户没有该偏好」
+```
 
 ### 商机专家协作与证据冲突
 
@@ -153,6 +178,10 @@ pnpm dev:crons
 Mem0、WeKnora 与 Langfuse 的本地服务部署和组织绑定，见 [本地服务指南](infra/local-agent-services/README.md)与[接入契约](docs/integrations/agent-services.md)。
 
 ### 演示与真实运行回放
+
+**在线版**：[https://lau0708.github.io/cross-border-crm/](https://lau0708.github.io/cross-border-crm/) —— 无需安装、无需配置、无真实外发。
+
+**本地版**（与在线版同源，便于离线查看）：
 
 ```bash
 node scripts/serve-agent-demo.mjs
