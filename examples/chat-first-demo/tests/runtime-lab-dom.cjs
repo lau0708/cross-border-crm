@@ -1,7 +1,7 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const {JSDOM,VirtualConsole}=require(process.env.JSDOM_PATH||'jsdom');
 const cssTree=require(process.env.CSS_TREE_PATH||'css-tree');
-const html=fs.readFileSync('dist/index.html','utf8').replace(/<link rel="stylesheet"[^>]+>/g,'').replace(/<script src="([^\"]+)"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
+const html=fs.readFileSync('dist/index.html','utf8').replace(/<link rel="stylesheet"[^>]+>/g,'').replace(/<script src="([^\"?]+)(?:\?[^\"]*)?"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
 function boot(saved,width=1280){const errors=[],requests=[];const vc=new VirtualConsole();vc.on('jsdomError',x=>errors.push(x.message));const dom=new JSDOM(html,{runScripts:'dangerously',url:'https://crm-local.test/#/app/ai/workbench',virtualConsole:vc,beforeParse(w){Object.defineProperty(w,'innerWidth',{value:width});w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=function(){};w.fetch=(...x)=>{requests.push(x);throw Error('No requests allowed');};w.XMLHttpRequest=function(){requests.push('xhr');throw Error('No XHR allowed');};w.WebSocket=function(){requests.push('ws');throw Error('No socket allowed');};w.navigator.sendBeacon=()=>{requests.push('beacon');return false};if(saved)w.localStorage.setItem('pinative.runtime-lab.v1',saved);}});return {dom,w:dom.window,d:dom.window.document,errors,requests};}
 let ctx=boot(),{w,d}=ctx;
 const click=s=>{assert.ok(d.querySelector(s),s);d.querySelector(s).click();};const command=a=>click('[data-lab="'+a+'"]');const state=()=>w.CRM_DEMO_LAB.engine.getState();

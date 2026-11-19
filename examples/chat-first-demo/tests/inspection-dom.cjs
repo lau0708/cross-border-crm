@@ -1,7 +1,7 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const {JSDOM,VirtualConsole}=require(process.env.JSDOM_PATH||'jsdom');
 const cssTree=require(process.env.CSS_TREE_PATH||'css-tree');
-const html=fs.readFileSync('dist/index.html','utf8').replace(/<link rel="stylesheet"[^>]+>/g,'').replace(/<script src="([^\"]+)"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
+const html=fs.readFileSync('dist/index.html','utf8').replace(/<link rel="stylesheet"[^>]+>/g,'').replace(/<script src="([^\"?]+)(?:\?[^\"]*)?"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
 function boot(width=1280){let interval;const errors=[],requests=[];const vc=new VirtualConsole();vc.on('jsdomError',x=>errors.push(x.message));const dom=new JSDOM(html,{runScripts:'dangerously',url:'https://crm-inspection.test/#/app/ai/workbench',virtualConsole:vc,beforeParse(w){Object.defineProperty(w,'innerWidth',{value:width});w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=function(){};w.setInterval=fn=>(interval=fn,1);w.clearInterval=()=>{};w.fetch=(...x)=>{requests.push(x);throw Error('No transport');};w.XMLHttpRequest=function(){requests.push('xhr');throw Error('No transport');};w.WebSocket=function(){requests.push('ws');throw Error('No transport');};w.navigator.sendBeacon=()=>{requests.push('beacon');return false;};}});return {dom,w:dom.window,d:dom.window.document,errors,requests,complete(){for(let i=0;i<4;i++)interval();}};}
 const ctx=boot(),{w,d}=ctx;
 const click=s=>{assert.ok(d.querySelector(s),s);d.querySelector(s).click();};

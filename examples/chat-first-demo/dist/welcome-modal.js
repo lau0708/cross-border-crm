@@ -9,7 +9,7 @@
   overlay.innerHTML =
     '<div class="demo-gate-card">' +
       '<button class="demo-gate-close" type="button" aria-label="关闭">×</button>' +
-      '<img class="demo-gate-avatar" src="welcome-avatar.png" alt="刘悦 Lau 头像" />' +
+      '<img class="demo-gate-avatar" src="welcome-avatar.png?v=3" alt="刘悦 Lau 头像" />' +
       '<span class="demo-gate-badge">只读演示 · 无需登录</span>' +
       '<h2 class="demo-gate-title">PiNative CRM 交互演示</h2>' +
       '<p class="demo-gate-sub">Agent 原生 CRM 工作台 · 全部为虚构数据</p>' +

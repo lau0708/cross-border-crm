@@ -10,7 +10,7 @@ assert.equal(rows[0].evaluations.find(e=>e.profileRevision===8&&e.semanticJudge.
 assert.equal(rows[1].evaluations.find(e=>e.semanticJudge.status==='completed').semanticJudge.score,92);
 for(const r of rows){assert.equal(r.provenance,'recorded_real_model_synthetic_crm');assert.equal(r.boundaries.hiddenReasoningIncluded,false);assert.equal(r.boundaries.credentialsIncluded,false);assert.ok(r.modelCalls.every(c=>c.provider==='opencode'&&c.model==='space-bunny-free'));assert.deepEqual(r.events.map(e=>e.sequence),r.events.map((_,i)=>i+1));}
 assert.doesNotMatch(JSON.stringify(rows),/sk-[A-Za-z0-9_-]{8,}|privateContinuation|apiKey|13800138001|[\w.+-]+@[\w.-]+\.[a-z]{2,}/i);
-const html=fs.readFileSync('dist/index.html','utf8').replace(/<link rel="stylesheet"[^>]+>/g,'').replace(/<script src="([^"]+)"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
+const html=fs.readFileSync('dist/index.html','utf8').replace(/<link rel="stylesheet"[^>]+>/g,'').replace(/<script src="([^"?]+)(?:\?[^"]*)?"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
 const requests=[];
 const dom=new JSDOM(html,{url:'http://localhost/#/app/ai/workbench',runScripts:'dangerously',beforeParse(w){w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};w.fetch=(...a)=>{requests.push(a);throw Error('No transport allowed in recording replay');};}});
 const d=dom.window.document;dom.window.CRM_SERVICES.open('real');

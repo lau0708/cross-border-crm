@@ -1,7 +1,7 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const {JSDOM,VirtualConsole}=require(process.env.JSDOM_PATH||'jsdom');
 const cssTree=require(process.env.CSS_TREE_PATH||'css-tree');
-const html=fs.readFileSync('dist/index.html','utf8').replace('<link rel="stylesheet" href="style.css">','').replace(/<script src="([^\"]+)"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
+const html=fs.readFileSync('dist/index.html','utf8').replace('<link rel="stylesheet" href="style.css">','').replace(/<script src="([^\"?]+)(?:\?[^\"]*)?"><\/script>/g,(_,f)=>'<script>'+fs.readFileSync('dist/'+f,'utf8').replace(/<\/script>/g,'<\\/script>')+'</script>');
 let interval,errors=[];const vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
 const dom=new JSDOM(html,{runScripts:'dangerously',url:'https://crm-source.test/#/app/ai/workbench',virtualConsole:vc,beforeParse(w){w.structuredClone=structuredClone;w.scrollTo=()=>{};w.setInterval=fn=>(interval=fn,1);w.clearInterval=()=>{interval=null};}});
 const w=dom.window,d=w.document,ev=(el,k)=>el.dispatchEvent(new w.Event(k,{bubbles:true})),click=s=>{assert.ok(d.querySelector(s),s);d.querySelector(s).click()},fill=(s,value)=>{const e=d.querySelector(s);assert.ok(e,s);e.value=value;ev(e,'input')},select=(s,value)=>{d.querySelector(s).value=value;ev(d.querySelector(s),'change')},get=s=>w.eval(s),complete=()=>{for(let i=0;i<4;i++)interval()};

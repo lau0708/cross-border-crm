@@ -40,7 +40,7 @@ for (const rule of ['.agent-composer', '.agent-workspace', '.sidebar', '.lab-lay
 for (const rule of ['height:var(--app-height,100dvh)', 'min-height:0', 'overflow-y:auto', '.agent-composer{flex-shrink:0']) assert.ok(css['style.css'].includes(rule), rule);
 const html = fs.readFileSync('dist/index.html', 'utf8');
 assert.ok(html.indexOf('modern.css') > html.indexOf('inspection.css'));
-const source = html.replace(/<link rel="stylesheet"[^>]+>/g, '').replace(/<script src="([^\"]+)"><\/script>/g, (_, name) => '<script>' + fs.readFileSync('dist/' + name, 'utf8').replace(/<\/script>/g, '<\\/script>') + '</script>');
+const source = html.replace(/<link rel="stylesheet"[^>]+>/g, '').replace(/<script src="([^\"?]+)(?:\?[^\"]*)?"><\/script>/g, (_, name) => '<script>' + fs.readFileSync('dist/' + name, 'utf8').replace(/<\/script>/g, '<\\/script>') + '</script>');
 for (const width of [320, 390, 768, 1440]) {
   const errors = [], requests = [];
   const virtualConsole = new VirtualConsole(); virtualConsole.on('jsdomError', e => errors.push(e.message));
