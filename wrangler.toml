@@ -1,0 +1,5 @@
+# Cloudflare Pages 配置
+# 静态产物已提交在 examples/chat-first-demo/dist，无需构建。
+# 本地部署：npx wrangler pages deploy --project-name lau-crm-demo
+compatibility_date = "2026-11-19"
+pages_build_output_dir = "examples/chat-first-demo/dist"
