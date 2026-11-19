@@ -1,41 +1,51 @@
 .demo-gate {
   position: fixed; inset: 0; z-index: 9999;
   display: flex; align-items: center; justify-content: center;
-  padding: 20px; background: rgba(0, 0, 0, 0.5);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  padding: 20px; background: rgba(17, 17, 20, 0.52);
+  -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);
 }
 .demo-gate-card {
-  position: relative; width: 100%; max-width: 460px;
-  background: #fff; color: #1d1d1f; border-radius: 20px;
-  padding: 28px 28px 24px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  position: relative; width: 100%; max-width: 440px;
+  background: #fff; color: #1d1d1f; border-radius: 24px;
+  padding: 34px 30px 28px; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter,
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 .demo-gate-close {
-  position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+  position: absolute; top: 18px; right: 18px; width: 34px; height: 34px;
   border: none; background: #f1f3f5; color: #6e6e73; border-radius: 50%;
-  font-size: 18px; line-height: 1; cursor: pointer;
+  font-size: 20px; line-height: 1; cursor: pointer;
 }
 .demo-gate-close:hover { background: #e5e7eb; color: #1d1d1f; }
-.demo-gate-badge {
-  display: inline-block; background: #eef4fe; color: #0a58ca; border-radius: 999px;
-  padding: 6px 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+.demo-gate-avatar {
+  width: 84px; height: 84px; border-radius: 50%; object-fit: cover;
+  border: 3px solid #fff; box-shadow: 0 0 0 1px #e5e7eb, 0 10px 22px rgba(0, 0, 0, 0.12);
+  display: inline-block;
 }
-.demo-gate-title { margin: 14px 0 6px; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
-.demo-gate-sub { margin: 0; color: #6e6e73; font-size: 14px; }
-.demo-gate-meta { margin-top: 16px; padding-top: 14px; border-top: 1px solid #f1f3f5; font-size: 13px; color: #6e6e73; }
-.demo-gate-meta a { color: #0066cc; text-decoration: none; }
+.demo-gate-badge {
+  display: inline-block; margin-top: 20px; background: #eef4fe; color: #0a58ca;
+  border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+}
+.demo-gate-title { margin: 14px 0 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.demo-gate-sub { margin: 8px 0 0; color: #6e6e73; font-size: 15px; }
+.demo-gate-divider { height: 1px; background: #f1f3f5; margin: 22px 0 16px; }
+.demo-gate-meta { font-size: 13px; color: #6e6e73; }
+.demo-gate-meta a { color: #0066cc; text-decoration: none; font-weight: 600; }
 .demo-gate-meta a:hover { text-decoration: underline; }
 .demo-gate-note {
-  margin-top: 14px; padding: 10px 12px; background: #fdf5e6; color: #1d1d1f;
-  border-radius: 10px; font-size: 13px; font-weight: 600;
+  margin-top: 14px; padding: 10px 14px; background: #fdf5e6; color: #1d1d1f;
+  border-radius: 12px; font-size: 13px; font-weight: 600;
 }
-.demo-gate-disclaimer { margin: 14px 0 0; font-size: 12.5px; line-height: 1.6; color: #6e6e73; }
+.demo-gate-disclaimer { margin: 14px 0 0; font-size: 12.5px; line-height: 1.65; color: #6e6e73; }
 .demo-gate-enter {
-  margin-top: 20px; width: 100%; border: none; background: #1d1d1f; color: #fff;
-  border-radius: 12px; padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer;
+  margin-top: 22px; width: 100%; border: none; background: #1d1d1f; color: #fff;
+  border-radius: 14px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
 .demo-gate-enter:hover { background: #2a2a2d; }
+.demo-gate-enter:active { transform: scale(0.99); }
 @media (max-width: 480px) {
-  .demo-gate-card { padding: 22px 20px 20px; }
+  .demo-gate-card { padding: 26px 20px 22px; border-radius: 20px; }
+  .demo-gate-avatar { width: 72px; height: 72px; }
 }
